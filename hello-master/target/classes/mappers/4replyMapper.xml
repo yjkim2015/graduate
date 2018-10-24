@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.graduate.mapper.4ReplyMapper">
+  
+  <select id="list4" resultType="com.graduate.domain.ReplyVO4">
+  	select
+  	*
+  	from
+  	tbl_reply4
+  	where bno =#{bno}
+  	order by rno desc
+  </select>
+  
+  <insert id="create4" parameterType="com.graduate.domain.ReplyVO4">
+  insert into tbl_reply4 (bno,replytext,replyer)
+  values (#{bno},#{replytext},#{replyer})
+   <selectKey resultType="int" keyProperty="rno" order="AFTER">
+	select LAST_INSERT_ID()
+	</selectKey>
+  
+  </insert>
+  
+  
+  <update id="update4" parameterType="com.graduate.domain.ReplyVO4">
+  	update tbl_reply4 set replytext =#{replytext},updatedate=now()
+  	where rno = #{rno}
+  </update>
+  
+  <delete id="delete4" parameterType="java.lang.Integer">
+  	delete from tbl_reply4 where rno =#{rno}
+  </delete>
+  
+ <select id="listPage4" resultType="com.graduate.domain.ReplyVO4">
+ 	select
+ 	*
+ 	from
+ 	tbl_reply4
+ 	where
+ 	bno=#{bno}
+ 	order by rno desc
+ 	limit #{cri.pageStart},#{cri.perPageNum}
+ </select>
+ 
+ <select id="count4" resultType="int">
+ 	select count(bno) from tbl_reply4 where bno =#{bno}
+ </select>
+ 
+ <select id="getBno4" resultType="int">
+ select bno from tbl_reply4 where rno = #{rno}
+ </select>
+ 
+
+</mapper>
