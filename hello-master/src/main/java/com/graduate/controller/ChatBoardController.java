@@ -1,5 +1,11 @@
 package com.graduate.controller;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -172,6 +178,68 @@ public class ChatBoardController {
 		
 		 
 		 return map;
+		 
+	}
+	@RequestMapping(value="/chat_send",method= {RequestMethod.GET,RequestMethod.POST},produces="application/text;charset=utf8")
+	public @ResponseBody String chat_send(String msg,int speak) throws Exception{
+//		System.out.println(msg);
+		 String send_msg="";
+		 String []arr=msg.split(":");
+		 System.out.println(arr.length+"배열 길이당");
+		 String clientId = "OoFEn1ZnOZuHpNnRhUAP";//애플리케이션 클라이언트 아이디값";
+	        String clientSecret = "dU4Ean5xoj";//애플리케이션 클라이언트 시크릿값";
+	        try {
+	            String text="";
+	            if(arr.length==1) 
+	            { text= URLEncoder.encode(arr[0], "UTF-8");}
+	            else{text= URLEncoder.encode(arr[1], "UTF-8");}
+	            String apiURL = "https://openapi.naver.com/v1/language/translate";
+	            URL url = new URL(apiURL);
+	            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+	            con.setRequestMethod("POST");
+	            con.setRequestProperty("X-Naver-Client-Id", clientId);
+	            con.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+	            // post request
+	            String postParams="";
+	            if(speak==0) {
+	            	postParams = "source=ko&target=en&text=" + text;
+	            }else if(speak==1) {
+	            	postParams = "source=en&target=ko&text=" + text;
+
+	            }
+	            con.setDoOutput(true);
+	            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+	            wr.writeBytes(postParams);
+	            wr.flush();
+	            wr.close();
+	            int responseCode = con.getResponseCode();
+	            BufferedReader br;
+	            if(responseCode==200) { // 정상 호출
+	                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	            } else {  // 에러 발생
+	                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+	            }
+	            String inputLine;
+	            StringBuffer response = new StringBuffer();
+	            while ((inputLine = br.readLine()) != null) {
+	                response.append(inputLine);
+	            }
+	            br.close();
+	            String [] msg2= response.toString().split(",");
+	            int index=0;
+	            for(int i=0;i<msg2.length;i++) {
+	            	if(msg2[i].indexOf("translatedText")!=-1) {
+	            		index=i;
+	            	}
+	            }
+	            msg2[index]=msg2[index].substring(0, msg2[index].length());
+	            
+	            send_msg=msg2[index];
+	            System.out.println(send_msg);
+	        } catch (Exception e) {
+	            System.out.println(e);
+	        }
+		 return send_msg;
 		 
 	}
 	

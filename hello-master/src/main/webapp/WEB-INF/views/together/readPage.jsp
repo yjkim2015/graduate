@@ -142,6 +142,8 @@ function show_detail(){
 </script>
 
 <script type="text/javascript">
+var speak=0;
+
  var wsocket;
  var count=0;
  var bno = ${chatBoardVO.bno}
@@ -151,7 +153,7 @@ function show_detail(){
  function connect() {
 	if(connection==1){
   wsocket = new SockJS(
-	"https://13.59.1.183/chat.sockjs");
+	"https://localhost/chat.sockjs");
   wsocket.onopen = onOpen;
   wsocket.onmessage = onMessage;
   wsocket.onclose = onClose;
@@ -259,9 +261,35 @@ function show_detail(){
   
 	
  }
-
+ function speak_change1(){
+	 speak=0;
+	 alert("한글입력/영어번역");
+}
+	 function speak_change2(){
+	 	speak=1;
+	 	alert("영어입력/한글번역");
+}
  function appendMessage(msg) {
-  $("#chatMessageArea").append("<li class='chatlist' id='join3'>"+msg+"<br></li>");
+	 $("#chatMessageArea").append("<li class='chatlist' id='join3'>"+msg+"<br></li>");
+
+	 $.ajax({
+		  data:{
+			  msg:msg,
+			  speak:speak
+		  },
+		  url:"chat_send",
+		  success:function(data){
+			  alert(data);
+
+			  var index=data.indexOf("{");
+
+				var msg=data.substring(index+1,data.length);
+
+
+				  $("#chatMessageArea").append("<li class='chatlist' id='join3'>"+msg+"<br></li>");
+
+		  }
+			 });
   var chatAreaHeight = $("#chatArea").height();
   var maxScroll = $("#chatMessageArea").height() - chatAreaHeight;
   $("#chatArea").scrollTop(maxScroll);
@@ -278,6 +306,9 @@ function show_detail(){
   $('#sendBtn').click(function() { send(); });
   $('#enterBtn').click(function() { connect(); });
   $('#exitBtn').click(function() { disconnect(); });
+  $('#korean').click(function(){speak_change1()});
+  $('#english').click(function(){speak_change2()});
+  
  });
 </script>
 
@@ -425,8 +456,11 @@ $(document).ready(function(){
 		</div>
 		
 		<div class="box-body" style="margin-bottom:5px;">
-	<input type="text" id="nickname" value="${id} | ${name}" readonly class="join2" style="color:black; font-size:14px ;font-weight:bolder; margin-left:130px;">
-	<input type="button" id="enterBtn" value="입장" class="btn btn-success" style="font-size:10px; margin-left:5px;">
+	<input type="button" id="korean" value="한글" class="btn btn-success" style="font-size:10px; margin-left:30px;">
+	<input type="button" id="english" value="English" class="btn btn-success" style="font-size:10px; margin-left:5px;">
+	
+	<input type="text" id="nickname" value="${id} | ${name}" readonly class="join2" style="color:black; font-size:14px ;font-weight:bolder; margin-left:30px;">
+	<input type="button" id="enterBtn" value="입장" class="btn btn-success" style="font-size:10px; margin-left:30px;">
  	<input type="button" id="exitBtn" value="나가기" class="btn btn-danger" style="font-size:10px;">
     
     </div>
