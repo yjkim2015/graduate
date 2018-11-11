@@ -39,692 +39,693 @@ import com.graduate.service.BoardService3;
 @RequestMapping("/information/*")
 public class SearchBoardController {
 
-	private static final Logger logger= LoggerFactory.getLogger(SearchBoardController.class);
-	
-	@Inject 
-	private BoardService service;
-	@Inject
-	private BoardService3 service3;
-	String href;
-	String href2;
-	Web web;
-	
+   private static final Logger logger= LoggerFactory.getLogger(SearchBoardController.class);
+   
+   @Inject 
+   private BoardService service;
+   @Inject
+   private BoardService3 service3;
+   String href;
+   String href2;
+   Web web;
+   
 
-	@RequestMapping(value="/register" , method=RequestMethod.GET)
-	public void registGET() throws Exception{
-		logger.info("regist get ......");
-	}
-	
-	@RequestMapping(value="/register" , method=RequestMethod.POST)
-	public String registPOST(BoardVO board, RedirectAttributes rttr)
-			throws Exception{
-		logger.info("regist post ......");
-		logger.info(board.toString());
-		
-		service.regist(board);
-		rttr.addFlashAttribute("msg","SUCCESS");
-		
-		return "redirect:/information/";
-	}
-	
-	@RequestMapping(value="/",method=RequestMethod.GET)
-	public String infor(@ModelAttribute("cri") SearchCriteria cri,
-			Model model) throws Exception{
-		
-		logger.info(cri.toString());
+   @RequestMapping(value="/register" , method=RequestMethod.GET)
+   public void registGET() throws Exception{
+      logger.info("regist get ......");
+   }
+   
+   @RequestMapping(value="/register" , method=RequestMethod.POST)
+   public String registPOST(BoardVO board, RedirectAttributes rttr)
+         throws Exception{
+      logger.info("regist post ......");
+      logger.info(board.toString());
+      
+      service.regist(board);
+      rttr.addFlashAttribute("msg","SUCCESS");
+      
+      return "redirect:/information/";
+   }
+   
+   @RequestMapping(value="/",method=RequestMethod.GET)
+   public String infor(@ModelAttribute("cri") SearchCriteria cri,
+         Model model) throws Exception{
+      
+      logger.info(cri.toString());
 
-		model.addAttribute("list",service.listSearchCriteria(cri));
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(cri);
-		
-		pageMaker.setTotalCount(service.listSearchCount(cri));
-		model.addAttribute("pageMaker",pageMaker);
-		return "/information/information";
-	}
-	
-	@RequestMapping(value="/readPage",method=RequestMethod.GET)
-	public void read(@RequestParam("bno") int bno,
-			@ModelAttribute("cri") SearchCriteria cri, Model model,@RequestParam("title") String title)
-		throws Exception{
-		String[] arrhref = null;
-		String[] arrhref2=null;
-		String go=null;
-		String url=null;
-		int count=1;
-		if(title.equals("È«Äá")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=1";
-		}else if(title.equals("È«Äá-1")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=2";
-		}
-		else if(title.equals("È«Äá-2")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=2";
-		}
-		else if(title.equals("È«Äá-3")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=3";
-		}else if(title.equals("È«Äá-4")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=4";
-		}else if(title.equals("È«Äá-5")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=5";
-		}else if(title.equals("È«Äá-6")) {
-			url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=6";
-		}else if(title.equals("¸¶Ä«¿À")) {
-			url="http://www.tourtips.com/dest/list/1008_macau?type=place";
-		}else if(title.equals("¸¶Ä«¿À-1")) {
-			url="http://www.tourtips.com/dest/list/1008_macau?type=place";
-		}else if(title.equals("¸¶Ä«¿À-2")) {
-			url="http://www.tourtips.com/dest/list/1008_macau?type=place&page=2";
-		}else if(title.equals("¸¶Ä«¿À-3")) {
-			url="http://www.tourtips.com/dest/list/1008_macau?type=place&page=3";
-		}else if(title.equals("¿À»çÄ«")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place";
-		}
-		else if(title.equals("¿À»çÄ«-1")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place";
-		}else if(title.equals("¿À»çÄ«-2")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=2";
-		}else if(title.equals("¿À»çÄ«-3")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=3";
-		}else if(title.equals("¿À»çÄ«-4")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=4";
-		}else if(title.equals("¿À»çÄ«-5")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=5";
-		}else if(title.equals("¿À»çÄ«-6")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=6";
-		}else if(title.equals("¿À»çÄ«-7")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=7";
-		}else if(title.equals("¿À»çÄ«-8")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=8";
-		}else if(title.equals("¿À»çÄ«-9")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=9";
-		}else if(title.equals("¿À»çÄ«-10")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=10";
-		}else if(title.equals("¿À»çÄ«-11")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=11";
-		}else if(title.equals("¿À»çÄ«-12")) {
-			url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=12";
-		}else if(title.equals("ÈÄÄí¿ÀÄ«")) {
-			url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place";
-		}
-		else if(title.equals("ÈÄÄí¿ÀÄ«-1")) {
-			url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place";
-		}else if(title.equals("ÈÄÄí¿ÀÄ«-2")) {
-			url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=2";
-		}else if(title.equals("ÈÄÄí¿ÀÄ«-3")) {
-			url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=3";
-		}else if(title.equals("ÈÄÄí¿ÀÄ«-4")) {
-			url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=4";
-		}else if(title.equals("µµÄì")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place";
-		}
-		else if(title.equals("µµÄì-1")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place";
-		}else if(title.equals("µµÄì-2")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=2";
-		}else if(title.equals("µµÄì-3")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=3";
-		}else if(title.equals("µµÄì-4")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=4";
-		}else if(title.equals("µµÄì-5")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=5";
-		}else if(title.equals("µµÄì-6")) {
-			url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=6";
-		}else if(title.equals("¿ÀÅ°³ª¿Í")) {
-			url="http://www.tourtips.com/dest/list/1051_okinawa?type=place";
-		}else if(title.equals("¿ÀÅ°³ª¿Í-1")) {
-			url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=1";
-		}else if(title.equals("¿ÀÅ°³ª¿Í-2")) {
-			url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=2";
-		}else if(title.equals("¿ÀÅ°³ª¿Í-3")) {
-			url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=3";
-		}else if(title.equals("¿ÀÅ°³ª¿Í-4")) {
-			url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=4";
-		}
-		else if(title.equals("Å¸ÀÌº£ÀÌ")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place";
-		}
-		else if(title.equals("Å¸ÀÌº£ÀÌ-1")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place";
-		}else if(title.equals("Å¸ÀÌº£ÀÌ-2")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=2";
-		}else if(title.equals("Å¸ÀÌº£ÀÌ-3")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=3";
-		}else if(title.equals("Å¸ÀÌº£ÀÌ-4")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=4";
-		}else if(title.equals("Å¸ÀÌº£ÀÌ-5")) {
-			url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=5";
-		}else if(title.equals("°¡¿À½¹")) {
-			url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place";
-		}
-		else if(title.equals("°¡¿À½¹-1")) {
-			url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place";
-		}else if(title.equals("°¡¿À½¹-2")) {
-			url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place&page=2";
-		}else if(title.equals("Å¸ÀÌÁß")) {
-			url="http://www.tourtips.com/dest/list/1035_taichung?type=place";
-		}
-		else if(title.equals("Å¸ÀÌÁß-1")) {
-			url="http://www.tourtips.com/dest/list/1035_taichung?type=place";
-		}else if(title.equals("Å¸ÀÌÁß-2")) {
-			url="http://www.tourtips.com/dest/list/1035_taichung?type=place&page=2";
-		}else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place";
-		}
-		else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)-1")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place";
-		}else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)-2")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=2";
-		}else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)-3")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=3";
-		}else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)-4")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=4";
-		}else if(title.equals("º£ÀÌÂ¡(ºÏ°æ)-5")) {
-			url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=5";
-		}else if(title.equals("»óÇÏÀÌ(»óÇØ)")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place";
-		}
-		else if(title.equals("»óÇÏÀÌ(»óÇØ)-1")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place";
-		}else if(title.equals("»óÇÏÀÌ(»óÇØ)-2")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=2";
-		}else if(title.equals("»óÇÏÀÌ(»óÇØ)-3")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=3";
-		}else if(title.equals("»óÇÏÀÌ(»óÇØ)-4")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=4";
-		}else if(title.equals("»óÇÏÀÌ(»óÇØ)-5")) {
-			url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=5";
-		}else if(title.equals("Äª´Ù¿À(Ã»µµ)")) {
-			url="http://www.tourtips.com/dest/list/1033_qingdao?type=place";
-		}
-		else if(title.equals("Äª´Ù¿À(Ã»µµ)-1")) {
-			url="http://www.tourtips.com/dest/list/1033_qingdao?type=place";
-		}else if(title.equals("Äª´Ù¿À(Ã»µµ)-2")) {
-			url="http://www.tourtips.com/dest/list/1033_qingdao?type=place&page=2";
-		}else if(title.equals("Äª´Ù¿À(Ã»µµ)-3")) {
-			url="http://www.tourtips.com/dest/list/1033_qingdao?type=place&page=3";
-		}else if(title.equals("È²»ê")) {
-			url="http://www.tourtips.com/dest/list/1039_huangshan?type=place";
-		}
-		else if(title.equals("È²»ê-1")) {
-			url="http://www.tourtips.com/dest/list/1039_huangshan?type=place";
-		}else if(title.equals("È²»ê-2")) {
-			url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=2";
-		}else if(title.equals("È²»ê-3")) {
-			url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=3";
-		}else if(title.equals("È²»ê-4")) {
-			url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=4";
-		}else if(title.equals("Àå°¡°è")) {
-			url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place";
-		}
-		else if(title.equals("Àå°¡°è-1")) {
-			url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place";
-		}else if(title.equals("Àå°¡°è-2")) {
-			url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=2";
-		}else if(title.equals("Àå°¡°è-3")) {
-			url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=3";
-		}else if(title.equals("Àå°¡°è-4")) {
-			url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=4";
-		}else if(title.equals("¼­¾È")) {
-			url="http://www.tourtips.com/dest/list/1048_xian?type=place";
-		}
-		else if(title.equals("¼­¾È-1")) {
-			url="http://www.tourtips.com/dest/list/1048_xian?type=place";
-		}else if(title.equals("¼­¾È-2")) {
-			url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=2";
-		}else if(title.equals("¼­¾È-3")) {
-			url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=3";
-		}else if(title.equals("¼­¾È-4")) {
-			url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=4";
-		}else if(title.equals("È£Ä¡¹Î")) {
-			url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place";
-		}
-		else if(title.equals("È£Ä¡¹Î-1")) {
-			url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place";
-		}else if(title.equals("È£Ä¡¹Î-2")) {
-			url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place&page=2";
-		}else if(title.equals("È£Ä¡¹Î-3")) {
-			url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place&page=3";
-		}else if(title.equals("ÇÏ³ëÀÌ")) {
-			url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
-		}
-		else if(title.equals("ÇÏ³ëÀÌ-1")) {
-			url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
-		}else if(title.equals("ÇÏ³ëÀÌ-2")) {
-			url="http://www.tourtips.com/dest/list/1049_hanoi?type=place&page=2";
-		}else if(title.equals("ÇÏ³ëÀÌ-3")) {
-			url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
-		}else if(title.equals("´Ù³¶")) {
-			url="http://www.tourtips.com/dest/list/1046_danang?type=place";
-		}
-		else if(title.equals("´Ù³¶-1")) {
-			url="http://www.tourtips.com/dest/list/1046_danang?type=place";
-		}else if(title.equals("´Ù³¶-2")) {
-			url="http://www.tourtips.com/dest/list/1046_danang?type=place&page=2";
-		}else if(title.equals("¶ó¿À½º")) {
-			url="http://www.tourtips.com/dest/list/1042_laos?type=place";
-		}
-		else if(title.equals("¶ó¿À½º-1")) {
-			url="http://www.tourtips.com/dest/list/1042_laos?type=place";
-		}else if(title.equals("¶ó¿À½º-2")) {
-			url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=2";
-		}else if(title.equals("¶ó¿À½º-3")) {
-			url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=3";
-		}else if(title.equals("¶ó¿À½º-4")) {
-			url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=4";
-		}else if(title.equals("Äí¾Ë¶ó·ëÇª¸£")) {
-			url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place";
-		}
-		else if(title.equals("Äí¾Ë¶ó·ëÇª¸£-1")) {
-			url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place";
-		}else if(title.equals("Äí¾Ë¶ó·ëÇª¸£-2")) {
-			url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place&page=2";
-		}else if(title.equals("Æä³¶")) {
-			url="http://www.tourtips.com/dest/list/1040_penang?type=place";
-		}
-		else if(title.equals("Æä³¶-1")) {
-			url="http://www.tourtips.com/dest/list/1040_penang?type=place";
-		}else if(title.equals("Æä³¶-2")) {
-			url="http://www.tourtips.com/dest/list/1040_penang?type=place=2";
-		}else if(title.equals("Æä³¶-3")) {
-			url="http://www.tourtips.com/dest/list/1040_penang?type=place=3";
-		}else if(title.equals("ÄÚÅ¸ Å°³ª¹ß·ç")) {
-			url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place";
-		}
-		else if(title.equals("ÄÚÅ¸ Å°³ª¹ß·ç-1")) {
-			url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place";
-		}else if(title.equals("ÄÚÅ¸ Å°³ª¹ß·ç-2")) {
-			url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place&page=2";
-		}else if(title.equals("¸¶´Ò¶ó")) {
-			url="http://www.tourtips.com/dest/list/1043_manila?type=place";
-		}
-		else if(title.equals("¸¶´Ò¶ó-1")) {
-			url="http://www.tourtips.com/dest/list/1043_manila?type=place";
-		}else if(title.equals("¸¶´Ò¶ó-2")) {
-			url="http://www.tourtips.com/dest/list/1043_manila?type=place&page=2";
-		}else if(title.equals("¸¶´Ò¶ó-3")) {
-			url="http://www.tourtips.com/dest/list/1043_manila?type=place&page=3";
-		}else if(title.equals("º¸¶óÄ«ÀÌ")) {
-			url="http://www.tourtips.com/dest/list/1011_boracay?type=place";
-		}
-		else if(title.equals("º¸¶óÄ«ÀÌ-1")) {
-			url="http://www.tourtips.com/dest/list/1011_boracay?type=place";
-		}else if(title.equals("º¸¶óÄ«ÀÌ-2")) {
-			url="http://www.tourtips.com/dest/list/1011_boracay?type=place&page=2";
-		}else if(title.equals("º¸¶óÄ«ÀÌ-3")) {
-			url="http://www.tourtips.com/dest/list/1011_boracay?type=place&page=3";
-		}else if(title.equals("¼¼ºÎ")) {
-			url="http://www.tourtips.com/dest/list/1012_cebu?type=place";
-		}
-		else if(title.equals("¼¼ºÎ-1")) {
-			url="http://www.tourtips.com/dest/list/1012_cebu?type=place";
-		}else if(title.equals("¼¼ºÎ-2")) {
-			url="http://www.tourtips.com/dest/list/1012_cebu?type=place&page=2";
-		}else if(title.equals("¼¼ºÎ-3")) {
-			url="http://www.tourtips.com/dest/list/1012_cebu?type=place&page=3";
-		}else if(title.equals("ÇªÄÏ")) {
-			url="http://www.tourtips.com/dest/list/1013_phuket?type=place";
-		}
-		else if(title.equals("ÇªÄÏ-1")) {
-			url="http://www.tourtips.com/dest/list/1013_phuket?type=place";
-		}else if(title.equals("ÇªÄÏ-2")) {
-			url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=2";
-		}else if(title.equals("ÇªÄÏ-3")) {
-			url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=3";
-		}else if(title.equals("ÇªÄÏ-4")) {
-			url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=4";
-		}else if(title.equals("¹æÄÛ")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place";
-		}
-		else if(title.equals("¹æÄÛ-1")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place";
-		}else if(title.equals("¹æÄÛ-2")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=2";
-		}else if(title.equals("¹æÄÛ-3")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=3";
-		}else if(title.equals("¹æÄÛ-4")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=4";
-		}else if(title.equals("¹æÄÛ-5")) {
-			url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=5";
-		}else if(title.equals("½Ì°¡Æ÷¸£")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place";
-		}
-		else if(title.equals("½Ì°¡Æ÷¸£-1")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place";
-		}else if(title.equals("½Ì°¡Æ÷¸£-2")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=2";
-		}else if(title.equals("½Ì°¡Æ÷¸£-3")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=3";
-		}else if(title.equals("½Ì°¡Æ÷¸£-4")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=4";
-		}else if(title.equals("½Ì°¡Æ÷¸£-5")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=5";
-		}else if(title.equals("½Ì°¡Æ÷¸£-6")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=6";
-		}else if(title.equals("½Ì°¡Æ÷¸£-7")) {
-			url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=7";
-		}else if(title.equals("ºí¶óµğº¸½ºÅäÅ©")) {
-			url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place";
-		}
-		else if(title.equals("ºí¶óµğº¸½ºÅäÅ©-1")) {
-			url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place";
-		}else if(title.equals("ºí¶óµğº¸½ºÅäÅ©-2")) {
-			url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place&page=2";
-		}else if(title.equals("ºí¶óµğº¸½ºÅäÅ©-3")) {
-			url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place&page=3";
-		}else if(title.equals("ÀÌ½ºÅººÒ")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place";
-		}
-		else if(title.equals("ÀÌ½ºÅººÒ-1")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place";
-		}else if(title.equals("ÀÌ½ºÅººÒ-2")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=2";
-		}else if(title.equals("ÀÌ½ºÅººÒ-3")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=3";
-		}else if(title.equals("ÀÌ½ºÅººÒ-4")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=4";
-		}else if(title.equals("ÀÌ½ºÅººÒ-5")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=5";
-		}else if(title.equals("ÀÌ½ºÅººÒ-6")) {
-			url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=6";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place";
-		}
-		else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-1")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-2")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=2";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-3")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=3";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-4")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=4";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-5")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=5";
-		}else if(title.equals("Å©·Î¾ÆÆ¼¾Æ-6")) {
-			url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=6";
-		}else if(title.equals("¹Ù¸£¼¿·Î³ª")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place";
-		}
-		else if(title.equals("¹Ù¸£¼¿·Î³ª-1")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place";
-		}else if(title.equals("¹Ù·Î¼¿·Î³ª-2")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=2";
-		}else if(title.equals("¹Ù¸£¼¿·Î³ª-3")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=3";
-		}else if(title.equals("¹Ù¸£¼¿·Î³ª-4")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=4";
-		}else if(title.equals("¹Ù¸£¼¿·Î³ª-5")) {
-			url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=5";
-		}else if(title.equals("·±´ø")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place";
-		}
-		else if(title.equals("·±´ø-1")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place";
-		}else if(title.equals("·±´ø-2")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=2";
-		}else if(title.equals("·±´ø-3")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=3";
-		}else if(title.equals("·±´ø-4")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=4";
-		}else if(title.equals("·±´ø-5")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=5";
-		}else if(title.equals("·±´ø-6")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=6";
-		}else if(title.equals("·±´ø-7")) {
-			url="http://www.tourtips.com/dest/list/1016_london?type=place&page=7";
-		}else if(title.equals("·Î¸¶")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place";
-		}
-		else if(title.equals("·Î¸¶-1")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place";
-		}else if(title.equals("·Î¸¶-2")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=2";
-		}else if(title.equals("·Î¸¶-3")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=3";
-		}else if(title.equals("·Î¸¶-4")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=4";
-		}else if(title.equals("·Î¸¶-5")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=5";
-		}else if(title.equals("·Î¸¶-6")) {
-			url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=6";
-		}else if(title.equals("ÆÄ¸®")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place";
-		}
-		else if(title.equals("ÆÄ¸®-1")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place";
-		}else if(title.equals("ÆÄ¸®-2")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=2";
-		}else if(title.equals("ÆÄ¸®-3")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=3";
-		}else if(title.equals("ÆÄ¸®-4")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=4";
-		}else if(title.equals("ÆÄ¸®-5")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=5";
-		}else if(title.equals("ÆÄ¸®-6")) {
-			url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=6";
-		}else if(title.equals("¹Ì¼­ºÎ")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place";
-		}
-		else if(title.equals("¹Ì¼­ºÎ-1")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place";
-		}else if(title.equals("¹Ì¼­ºÎ-2")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=2";
-		}else if(title.equals("¹Ì¼­ºÎ-3")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=3";
-		}else if(title.equals("¹Ì¼­ºÎ-4")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=4";
-		}else if(title.equals("¹Ì¼­ºÎ-5")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=5";
-		}else if(title.equals("¹Ì¼­ºÎ-6")) {
-			url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=6";
-		}else if(title.equals("ÇÏ¿ÍÀÌ")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place";
-		}
-		else if(title.equals("ÇÏ¿ÍÀÌ-1")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-2")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=2";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-3")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=3";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-4")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=4";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-5")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=5";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-6")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=6";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-7")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=7";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-8")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=8";
-		}else if(title.equals("ÇÏ¿ÍÀÌ-9")) {
-			url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=9";
-		}else if(title.equals("´º¿å")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place";
-		}
-		else if(title.equals("´º¿å-1")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place";
-		}else if(title.equals("´º¿å-2")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=2";
-		}else if(title.equals("´º¿å-3")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=3";
-		}else if(title.equals("´º¿å-4")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=4";
-		}else if(title.equals("´º¿å-5")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=5";
-		}else if(title.equals("´º¿å-6")) {
-			url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=6";
-		}
-		else if(title.equals("±¡")) {
-			url="http://www.tourtips.com/dest/list/1024_guam?type=place";
-		}
-		else if(title.equals("±¡-1")) {
-			url="http://www.tourtips.com/dest/list/1024_guam?type=place";
-		}
-		else if(title.equals("±¡-2")) {
-			url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=2";
-		}
-		else if(title.equals("±¡-3")) {
-			url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=3";
-		}
-		else if(title.equals("±¡-4")) {
-			url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=4";
-		}else if(title.equals("½Ãµå´Ï")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place";
-		}
-		else if(title.equals("½Ãµå´Ï-1")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place";
-		}else if(title.equals("½Ãµå´Ï-2")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=2";
-		}else if(title.equals("½Ãµå´Ï-3")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=3";
-		}else if(title.equals("½Ãµå´Ï-4")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=4";
-		}else if(title.equals("½Ãµå´Ï-5")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=5";
-		}else if(title.equals("½Ãµå´Ï-6")) {
-			url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=6";
-		}
-		
-		
-		List<Map> list = new ArrayList<Map>();
-		try {
-			
-			
-			Document rawData =Jsoup.connect(url)
-					.timeout(5000)
-					.get();
-			Elements articles = rawData.select("[class=spot_list] li img");
-			Elements articles2= rawData.select("[class=spot_list] li [class=title]");
-			Elements articles3= rawData.select("[class=spot_list] li [class=info] p");
-			
-			String str="";
-			String str2="";
-			String str3[];
-			String str4[];
-			String str5="";
-			String str6[];
-			for(int i=0;i<articles3.size();i++) {
-				if(i%2!=0) {
-					str2+=articles3.get(i).toString();
-				}else
-				{
-					str+=articles3.get(i).toString();
-				}
-				
-			}
-			str3=str2.split("</p>");
-			str4=str.split("</p>");
-		
-			for(int i=0;i<str3.length;i++) {
-				str3[i]+="</p>";
-				str4[i]+="</p>";
-				System.out.println(str4[i]);
-			}
+      model.addAttribute("list",service.listSearchCriteria(cri));
+      PageMaker pageMaker = new PageMaker();
+      pageMaker.setCri(cri);
+      
+      pageMaker.setTotalCount(service.listSearchCount(cri));
+      model.addAttribute("pageMaker",pageMaker);
+      return "/information/information";
+   }
+   
+   @RequestMapping(value="/readPage",method=RequestMethod.GET)
+   public void read(@RequestParam("bno") int bno,
+         @ModelAttribute("cri") SearchCriteria cri, Model model,@RequestParam("title") String title)
+      throws Exception{
+      String[] arrhref = null;
+      String[] arrhref2=null;
+      String go=null;
+      String url=null;
+      
+      int count=1;
+      if(title.equals("í™ì½©")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=1";
+      }else if(title.equals("í™ì½©-1")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=2";
+      }
+      else if(title.equals("í™ì½©-2")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=2";
+      }
+      else if(title.equals("í™ì½©-3")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=3";
+      }else if(title.equals("í™ì½©-4")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=4";
+      }else if(title.equals("í™ì½©-5")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=5";
+      }else if(title.equals("í™ì½©-6")) {
+         url="http://www.tourtips.com/dest/list/1001_hongkong?type=place&page=6";
+      }else if(title.equals("ë§ˆì¹´ì˜¤")) {
+         url="http://www.tourtips.com/dest/list/1008_macau?type=place";
+      }else if(title.equals("ë§ˆì¹´ì˜¤-1")) {
+         url="http://www.tourtips.com/dest/list/1008_macau?type=place";
+      }else if(title.equals("ë§ˆì¹´ì˜¤-2")) {
+         url="http://www.tourtips.com/dest/list/1008_macau?type=place&page=2";
+      }else if(title.equals("ë§ˆì¹´ì˜¤-3")) {
+         url="http://www.tourtips.com/dest/list/1008_macau?type=place&page=3";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place";
+      }
+      else if(title.equals("ì˜¤ì‚¬ì¹´-1")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-2")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=2";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-3")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=3";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-4")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=4";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-5")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=5";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-6")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=6";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-7")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=7";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-8")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=8";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-9")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=9";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-10")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=10";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-11")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=11";
+      }else if(title.equals("ì˜¤ì‚¬ì¹´-12")) {
+         url="http://www.tourtips.com/dest/list/1002_osaka?type=place&page=12";
+      }else if(title.equals("í›„ì¿ ì˜¤ì¹´")) {
+         url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place";
+      }
+      else if(title.equals("í›„ì¿ ì˜¤ì¹´-1")) {
+         url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place";
+      }else if(title.equals("í›„ì¿ ì˜¤ì¹´-2")) {
+         url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=2";
+      }else if(title.equals("í›„ì¿ ì˜¤ì¹´-3")) {
+         url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=3";
+      }else if(title.equals("í›„ì¿ ì˜¤ì¹´-4")) {
+         url="http://www.tourtips.com/dest/list/1003_fukuoka?type=place&page=4";
+      }else if(title.equals("ë„ì¿„")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place";
+      }
+      else if(title.equals("ë„ì¿„-1")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place";
+      }else if(title.equals("ë„ì¿„-2")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=2";
+      }else if(title.equals("ë„ì¿„-3")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=3";
+      }else if(title.equals("ë„ì¿„-4")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=4";
+      }else if(title.equals("ë„ì¿„-5")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=5";
+      }else if(title.equals("ë„ì¿„-6")) {
+         url="http://www.tourtips.com/dest/list/1005_tokyo?type=place&page=6";
+      }else if(title.equals("ì˜¤í‚¤ë‚˜ì™€")) {
+         url="http://www.tourtips.com/dest/list/1051_okinawa?type=place";
+      }else if(title.equals("ì˜¤í‚¤ë‚˜ì™€-1")) {
+         url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=1";
+      }else if(title.equals("ì˜¤í‚¤ë‚˜ì™€-2")) {
+         url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=2";
+      }else if(title.equals("ì˜¤í‚¤ë‚˜ì™€-3")) {
+         url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=3";
+      }else if(title.equals("ì˜¤í‚¤ë‚˜ì™€-4")) {
+         url="http://www.tourtips.com/dest/list/1051_okinawa?type=place&page=4";
+      }
+      else if(title.equals("íƒ€ì´ë² ì´")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place";
+      }
+      else if(title.equals("íƒ€ì´ë² ì´-1")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place";
+      }else if(title.equals("íƒ€ì´ë² ì´-2")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=2";
+      }else if(title.equals("íƒ€ì´ë² ì´-3")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=3";
+      }else if(title.equals("íƒ€ì´ë² ì´-4")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=4";
+      }else if(title.equals("íƒ€ì´ë² ì´-5")) {
+         url="http://www.tourtips.com/dest/list/1004_taipei?type=place&page=5";
+      }else if(title.equals("ê°€ì˜¤ìŠ")) {
+         url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place";
+      }
+      else if(title.equals("ê°€ì˜¤ìŠ-1")) {
+         url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place";
+      }else if(title.equals("ê°€ì˜¤ìŠ-2")) {
+         url="http://www.tourtips.com/dest/list/1034_kaohsiung?type=place&page=2";
+      }else if(title.equals("íƒ€ì´ì¤‘")) {
+         url="http://www.tourtips.com/dest/list/1035_taichung?type=place";
+      }
+      else if(title.equals("íƒ€ì´ì¤‘-1")) {
+         url="http://www.tourtips.com/dest/list/1035_taichung?type=place";
+      }else if(title.equals("íƒ€ì´ì¤‘-2")) {
+         url="http://www.tourtips.com/dest/list/1035_taichung?type=place&page=2";
+      }else if(title.equals("ë² ì´ì§•(ë¶ê²½)")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place";
+      }
+      else if(title.equals("ë² ì´ì§•(ë¶ê²½)-1")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place";
+      }else if(title.equals("ë² ì´ì§•(ë¶ê²½)-2")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=2";
+      }else if(title.equals("ë² ì´ì§•(ë¶ê²½)-3")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=3";
+      }else if(title.equals("ë² ì´ì§•(ë¶ê²½)-4")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=4";
+      }else if(title.equals("ë² ì´ì§•(ë¶ê²½)-5")) {
+         url="http://www.tourtips.com/dest/list/1006_beijing?type=place&page=5";
+      }else if(title.equals("ìƒí•˜ì´(ìƒí•´)")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place";
+      }
+      else if(title.equals("ìƒí•˜ì´(ìƒí•´)-1")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place";
+      }else if(title.equals("ìƒí•˜ì´(ìƒí•´)-2")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=2";
+      }else if(title.equals("ìƒí•˜ì´(ìƒí•´)-3")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=3";
+      }else if(title.equals("ìƒí•˜ì´(ìƒí•´)-4")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=4";
+      }else if(title.equals("ìƒí•˜ì´(ìƒí•´)-5")) {
+         url="http://www.tourtips.com/dest/list/1007_shanghai?type=place&page=5";
+      }else if(title.equals("ì¹­ë‹¤ì˜¤(ì²­ë„)")) {
+         url="http://www.tourtips.com/dest/list/1033_qingdao?type=place";
+      }
+      else if(title.equals("ì¹­ë‹¤ì˜¤(ì²­ë„)-1")) {
+         url="http://www.tourtips.com/dest/list/1033_qingdao?type=place";
+      }else if(title.equals("ì¹­ë‹¤ì˜¤(ì²­ë„)-2")) {
+         url="http://www.tourtips.com/dest/list/1033_qingdao?type=place&page=2";
+      }else if(title.equals("ì¹­ë‹¤ì˜¤(ì²­ë„)-3")) {
+         url="http://www.tourtips.com/dest/list/1033_qingdao?type=place&page=3";
+      }else if(title.equals("í™©ì‚°")) {
+         url="http://www.tourtips.com/dest/list/1039_huangshan?type=place";
+      }
+      else if(title.equals("í™©ì‚°-1")) {
+         url="http://www.tourtips.com/dest/list/1039_huangshan?type=place";
+      }else if(title.equals("í™©ì‚°-2")) {
+         url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=2";
+      }else if(title.equals("í™©ì‚°-3")) {
+         url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=3";
+      }else if(title.equals("í™©ì‚°-4")) {
+         url="http://www.tourtips.com/dest/list/1039_huangshan?type=place&page=4";
+      }else if(title.equals("ì¥ê°€ê³„")) {
+         url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place";
+      }
+      else if(title.equals("ì¥ê°€ê³„-1")) {
+         url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place";
+      }else if(title.equals("ì¥ê°€ê³„-2")) {
+         url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=2";
+      }else if(title.equals("ì¥ê°€ê³„-3")) {
+         url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=3";
+      }else if(title.equals("ì¥ê°€ê³„-4")) {
+         url="http://www.tourtips.com/dest/list/1045_zhangjiajie?type=place&page=4";
+      }else if(title.equals("ì„œì•ˆ")) {
+         url="http://www.tourtips.com/dest/list/1048_xian?type=place";
+      }
+      else if(title.equals("ì„œì•ˆ-1")) {
+         url="http://www.tourtips.com/dest/list/1048_xian?type=place";
+      }else if(title.equals("ì„œì•ˆ-2")) {
+         url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=2";
+      }else if(title.equals("ì„œì•ˆ-3")) {
+         url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=3";
+      }else if(title.equals("ì„œì•ˆ-4")) {
+         url="http://www.tourtips.com/dest/list/1048_xian?type=place&page=4";
+      }else if(title.equals("í˜¸ì¹˜ë¯¼")) {
+         url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place";
+      }
+      else if(title.equals("í˜¸ì¹˜ë¯¼-1")) {
+         url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place";
+      }else if(title.equals("í˜¸ì¹˜ë¯¼-2")) {
+         url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place&page=2";
+      }else if(title.equals("í˜¸ì¹˜ë¯¼-3")) {
+         url="http://www.tourtips.com/dest/list/1050_hochiminh?type=place&page=3";
+      }else if(title.equals("í•˜ë…¸ì´")) {
+         url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
+      }
+      else if(title.equals("í•˜ë…¸ì´-1")) {
+         url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
+      }else if(title.equals("í•˜ë…¸ì´-2")) {
+         url="http://www.tourtips.com/dest/list/1049_hanoi?type=place&page=2";
+      }else if(title.equals("í•˜ë…¸ì´-3")) {
+         url="http://www.tourtips.com/dest/list/1049_hanoi?type=place";
+      }else if(title.equals("ë‹¤ë‚­")) {
+         url="http://www.tourtips.com/dest/list/1046_danang?type=place";
+      }
+      else if(title.equals("ë‹¤ë‚­-1")) {
+         url="http://www.tourtips.com/dest/list/1046_danang?type=place";
+      }else if(title.equals("ë‹¤ë‚­-2")) {
+         url="http://www.tourtips.com/dest/list/1046_danang?type=place&page=2";
+      }else if(title.equals("ë¼ì˜¤ìŠ¤")) {
+         url="http://www.tourtips.com/dest/list/1042_laos?type=place";
+      }
+      else if(title.equals("ë¼ì˜¤ìŠ¤-1")) {
+         url="http://www.tourtips.com/dest/list/1042_laos?type=place";
+      }else if(title.equals("ë¼ì˜¤ìŠ¤-2")) {
+         url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=2";
+      }else if(title.equals("ë¼ì˜¤ìŠ¤-3")) {
+         url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=3";
+      }else if(title.equals("ë¼ì˜¤ìŠ¤-4")) {
+         url="http://www.tourtips.com/dest/list/1042_laos?type=place&page=4";
+      }else if(title.equals("ì¿ ì•Œë¼ë£¸í‘¸ë¥´")) {
+         url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place";
+      }
+      else if(title.equals("ì¿ ì•Œë¼ë£¸í‘¸ë¥´-1")) {
+         url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place";
+      }else if(title.equals("ì¿ ì•Œë¼ë£¸í‘¸ë¥´-2")) {
+         url="http://www.tourtips.com/dest/list/1041_kualalumpur?type=place&page=2";
+      }else if(title.equals("í˜ë‚­")) {
+         url="http://www.tourtips.com/dest/list/1040_penang?type=place";
+      }
+      else if(title.equals("í˜ë‚­-1")) {
+         url="http://www.tourtips.com/dest/list/1040_penang?type=place";
+      }else if(title.equals("í˜ë‚­-2")) {
+         url="http://www.tourtips.com/dest/list/1040_penang?type=place=2";
+      }else if(title.equals("í˜ë‚­-3")) {
+         url="http://www.tourtips.com/dest/list/1040_penang?type=place=3";
+      }else if(title.equals("ì½”íƒ€ í‚¤ë‚˜ë°œë£¨")) {
+         url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place";
+      }
+      else if(title.equals("ì½”íƒ€ í‚¤ë‚˜ë°œë£¨-1")) {
+         url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place";
+      }else if(title.equals("ì½”íƒ€ í‚¤ë‚˜ë°œë£¨-2")) {
+         url="http://www.tourtips.com/dest/list/1032_kotakinabalu?type=place&page=2";
+      }else if(title.equals("ë§ˆë‹ë¼")) {
+         url="http://www.tourtips.com/dest/list/1043_manila?type=place";
+      }
+      else if(title.equals("ë§ˆë‹ë¼-1")) {
+         url="http://www.tourtips.com/dest/list/1043_manila?type=place";
+      }else if(title.equals("ë§ˆë‹ë¼-2")) {
+         url="http://www.tourtips.com/dest/list/1043_manila?type=place&page=2";
+      }else if(title.equals("ë§ˆë‹ë¼-3")) {
+         url="http://www.tourtips.com/dest/list/1043_manila?type=place&page=3";
+      }else if(title.equals("ë³´ë¼ì¹´ì´")) {
+         url="http://www.tourtips.com/dest/list/1011_boracay?type=place";
+      }
+      else if(title.equals("ë³´ë¼ì¹´ì´-1")) {
+         url="http://www.tourtips.com/dest/list/1011_boracay?type=place";
+      }else if(title.equals("ë³´ë¼ì¹´ì´-2")) {
+         url="http://www.tourtips.com/dest/list/1011_boracay?type=place&page=2";
+      }else if(title.equals("ë³´ë¼ì¹´ì´-3")) {
+         url="http://www.tourtips.com/dest/list/1011_boracay?type=place&page=3";
+      }else if(title.equals("ì„¸ë¶€")) {
+         url="http://www.tourtips.com/dest/list/1012_cebu?type=place";
+      }
+      else if(title.equals("ì„¸ë¶€-1")) {
+         url="http://www.tourtips.com/dest/list/1012_cebu?type=place";
+      }else if(title.equals("ì„¸ë¶€-2")) {
+         url="http://www.tourtips.com/dest/list/1012_cebu?type=place&page=2";
+      }else if(title.equals("ì„¸ë¶€-3")) {
+         url="http://www.tourtips.com/dest/list/1012_cebu?type=place&page=3";
+      }else if(title.equals("í‘¸ì¼“")) {
+         url="http://www.tourtips.com/dest/list/1013_phuket?type=place";
+      }
+      else if(title.equals("í‘¸ì¼“-1")) {
+         url="http://www.tourtips.com/dest/list/1013_phuket?type=place";
+      }else if(title.equals("í‘¸ì¼“-2")) {
+         url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=2";
+      }else if(title.equals("í‘¸ì¼“-3")) {
+         url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=3";
+      }else if(title.equals("í‘¸ì¼“-4")) {
+         url="http://www.tourtips.com/dest/list/1013_phuket?type=place&page=4";
+      }else if(title.equals("ë°©ì½•")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place";
+      }
+      else if(title.equals("ë°©ì½•-1")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place";
+      }else if(title.equals("ë°©ì½•-2")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=2";
+      }else if(title.equals("ë°©ì½•-3")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=3";
+      }else if(title.equals("ë°©ì½•-4")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=4";
+      }else if(title.equals("ë°©ì½•-5")) {
+         url="http://www.tourtips.com/dest/list/1010_bangkok?type=place&page=5";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place";
+      }
+      else if(title.equals("ì‹±ê°€í¬ë¥´-1")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-2")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=2";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-3")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=3";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-4")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=4";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-5")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=5";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-6")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=6";
+      }else if(title.equals("ì‹±ê°€í¬ë¥´-7")) {
+         url="http://www.tourtips.com/dest/list/1009_singapore?type=place&page=7";
+      }else if(title.equals("ë¸”ë¼ë””ë³´ìŠ¤í† í¬")) {
+         url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place";
+      }
+      else if(title.equals("ë¸”ë¼ë””ë³´ìŠ¤í† í¬-1")) {
+         url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place";
+      }else if(title.equals("ë¸”ë¼ë””ë³´ìŠ¤í† í¬-2")) {
+         url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place&page=2";
+      }else if(title.equals("ë¸”ë¼ë””ë³´ìŠ¤í† í¬-3")) {
+         url="http://www.tourtips.com/dest/list/1052_vladivostok?type=place&page=3";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place";
+      }
+      else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-1")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-2")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=2";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-3")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=3";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-4")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=4";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-5")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=5";
+      }else if(title.equals("ì´ìŠ¤íƒ„ë¶ˆ-6")) {
+         url="http://www.tourtips.com/dest/list/1019_istanbul?type=place&page=6";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place";
+      }
+      else if(title.equals("í¬ë¡œì•„í‹°ì•„-1")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„-2")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=2";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„-3")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=3";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„-4")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=4";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„-5")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=5";
+      }else if(title.equals("í¬ë¡œì•„í‹°ì•„-6")) {
+         url="http://www.tourtips.com/dest/list/1018_croatia?type=place&page=6";
+      }else if(title.equals("ë°”ë¥´ì…€ë¡œë‚˜")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place";
+      }
+      else if(title.equals("ë°”ë¥´ì…€ë¡œë‚˜-1")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place";
+      }else if(title.equals("ë°”ë¡œì…€ë¡œë‚˜-2")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=2";
+      }else if(title.equals("ë°”ë¥´ì…€ë¡œë‚˜-3")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=3";
+      }else if(title.equals("ë°”ë¥´ì…€ë¡œë‚˜-4")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=4";
+      }else if(title.equals("ë°”ë¥´ì…€ë¡œë‚˜-5")) {
+         url="http://www.tourtips.com/dest/list/1017_barcelona?type=place&page=5";
+      }else if(title.equals("ëŸ°ë˜")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place";
+      }
+      else if(title.equals("ëŸ°ë˜-1")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place";
+      }else if(title.equals("ëŸ°ë˜-2")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=2";
+      }else if(title.equals("ëŸ°ë˜-3")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=3";
+      }else if(title.equals("ëŸ°ë˜-4")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=4";
+      }else if(title.equals("ëŸ°ë˜-5")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=5";
+      }else if(title.equals("ëŸ°ë˜-6")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=6";
+      }else if(title.equals("ëŸ°ë˜-7")) {
+         url="http://www.tourtips.com/dest/list/1016_london?type=place&page=7";
+      }else if(title.equals("ë¡œë§ˆ")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place";
+      }
+      else if(title.equals("ë¡œë§ˆ-1")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place";
+      }else if(title.equals("ë¡œë§ˆ-2")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=2";
+      }else if(title.equals("ë¡œë§ˆ-3")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=3";
+      }else if(title.equals("ë¡œë§ˆ-4")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=4";
+      }else if(title.equals("ë¡œë§ˆ-5")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=5";
+      }else if(title.equals("ë¡œë§ˆ-6")) {
+         url="http://www.tourtips.com/dest/list/1015_rome?type=place&page=6";
+      }else if(title.equals("íŒŒë¦¬")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place";
+      }
+      else if(title.equals("íŒŒë¦¬-1")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place";
+      }else if(title.equals("íŒŒë¦¬-2")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=2";
+      }else if(title.equals("íŒŒë¦¬-3")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=3";
+      }else if(title.equals("íŒŒë¦¬-4")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=4";
+      }else if(title.equals("íŒŒë¦¬-5")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=5";
+      }else if(title.equals("íŒŒë¦¬-6")) {
+         url="http://www.tourtips.com/dest/list/1014_paris?type=place&page=6";
+      }else if(title.equals("ë¯¸ì„œë¶€")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place";
+      }
+      else if(title.equals("ë¯¸ì„œë¶€-1")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place";
+      }else if(title.equals("ë¯¸ì„œë¶€-2")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=2";
+      }else if(title.equals("ë¯¸ì„œë¶€-3")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=3";
+      }else if(title.equals("ë¯¸ì„œë¶€-4")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=4";
+      }else if(title.equals("ë¯¸ì„œë¶€-5")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=5";
+      }else if(title.equals("ë¯¸ì„œë¶€-6")) {
+         url="http://www.tourtips.com/dest/list/1022_westernamerica?type=place&page=6";
+      }else if(title.equals("í•˜ì™€ì´")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place";
+      }
+      else if(title.equals("í•˜ì™€ì´-1")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place";
+      }else if(title.equals("í•˜ì™€ì´-2")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=2";
+      }else if(title.equals("í•˜ì™€ì´-3")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=3";
+      }else if(title.equals("í•˜ì™€ì´-4")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=4";
+      }else if(title.equals("í•˜ì™€ì´-5")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=5";
+      }else if(title.equals("í•˜ì™€ì´-6")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=6";
+      }else if(title.equals("í•˜ì™€ì´-7")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=7";
+      }else if(title.equals("í•˜ì™€ì´-8")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=8";
+      }else if(title.equals("í•˜ì™€ì´-9")) {
+         url="http://www.tourtips.com/dest/list/1020_hawaii?type=place&page=9";
+      }else if(title.equals("ë‰´ìš•")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place";
+      }
+      else if(title.equals("ë‰´ìš•-1")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place";
+      }else if(title.equals("ë‰´ìš•-2")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=2";
+      }else if(title.equals("ë‰´ìš•-3")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=3";
+      }else if(title.equals("ë‰´ìš•-4")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=4";
+      }else if(title.equals("ë‰´ìš•-5")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=5";
+      }else if(title.equals("ë‰´ìš•-6")) {
+         url="http://www.tourtips.com/dest/list/1021_newyork?type=place&page=6";
+      }
+      else if(title.equals("ê´Œ")) {
+         url="http://www.tourtips.com/dest/list/1024_guam?type=place";
+      }
+      else if(title.equals("ê´Œ-1")) {
+         url="http://www.tourtips.com/dest/list/1024_guam?type=place";
+      }
+      else if(title.equals("ê´Œ-2")) {
+         url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=2";
+      }
+      else if(title.equals("ê´Œ-3")) {
+         url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=3";
+      }
+      else if(title.equals("ê´Œ-4")) {
+         url="http://www.tourtips.com/dest/list/1024_guam?type=place&page=4";
+      }else if(title.equals("ì‹œë“œë‹ˆ")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place";
+      }
+      else if(title.equals("ì‹œë“œë‹ˆ-1")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place";
+      }else if(title.equals("ì‹œë“œë‹ˆ-2")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=2";
+      }else if(title.equals("ì‹œë“œë‹ˆ-3")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=3";
+      }else if(title.equals("ì‹œë“œë‹ˆ-4")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=4";
+      }else if(title.equals("ì‹œë“œë‹ˆ-5")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=5";
+      }else if(title.equals("ì‹œë“œë‹ˆ-6")) {
+         url="http://www.tourtips.com/dest/list/1023_sydney?type=place&page=6";
+      }
+      
+      
+      List<Map> list = new ArrayList<Map>();
+      try {
+         
+         
+         Document rawData =Jsoup.connect(url)
+               .timeout(5000)
+               .get();
+         Elements articles = rawData.select("[class=spot_list] li img");
+         Elements articles2= rawData.select("[class=spot_list] li [class=title]");
+         Elements articles3= rawData.select("[class=spot_list] li [class=info] p");
+         
+         String str="";
+         String str2="";
+         String str3[];
+         String str4[];
+         String str5="";
+         String str6[];
+         for(int i=0;i<articles3.size();i++) {
+            if(i%2!=0) {
+               str2+=articles3.get(i).toString();
+            }else
+            {
+               str+=articles3.get(i).toString();
+            }
+            
+         }
+         str3=str2.split("</p>");
+         str4=str.split("</p>");
+      
+         for(int i=0;i<str3.length;i++) {
+            str3[i]+="</p>";
+            str4[i]+="</p>";
+            System.out.println(str4[i]);
+         }
 
-//			for(int i=0;i<articles2.size();i++) {
-//				str5+=articles2.get(i).toString();
-//			}
-//			
-//			str6=str5.split("</strong>");
-//			
-//			for(int i=0;i<str6.length;i++) {
-//				str3[i]+=str6[i];
-//				System.out.println(str3[i]);
-//			}
-			for (int i = 0; i < articles.size(); i++) {
-				
-				Map<String, String> map = new HashMap<String,String>();
+//         for(int i=0;i<articles2.size();i++) {
+//            str5+=articles2.get(i).toString();
+//         }
+//         
+//         str6=str5.split("</strong>");
+//         
+//         for(int i=0;i<str6.length;i++) {
+//            str3[i]+=str6[i];
+//            System.out.println(str3[i]);
+//         }
+         for (int i = 0; i < articles.size(); i++) {
+            
+            Map<String, String> map = new HashMap<String,String>();
 
-				map.put("img", articles.get(i).attr("src"));
-				map.put("title", articles2.get(i).toString());
-				map.put("detail1",str3[i]);
-				map.put("detail2",str4[i]);
-				list.add(map);
-			
-		}
-		}
-		
-//			href=articles.toString();
-//			href2=articles2.toString();
-//			href=href.replace("<", "<p><");
-//			href=href.replace(">", " width=700px height=500px></p>");
-//			
-//			
-//			 arrhref=href.split("\n");
-//			 arrhref2=href2.split("\n");
-//			
-//			for(int i=0;i<arrhref.length;i++) {
-//			
-//			arrhref[i]="<div>"+arrhref[i]+arrhref2[i];
-//			
-//			System.out.println(arrhref[i]);
-//			}
-//			go=arrhref[0];
-//			for(int i=1;i<arrhref.length;i++) {
-//				go+=arrhref[i];
-//			
-//			}
-			
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-		model.addAttribute("list", list);
-		
-//		model.addAttribute("href",go);
-//		model.addAttribute("href2",href2);
-		model.addAttribute(service.read(bno));
-		
+            map.put("img", articles.get(i).attr("src"));
+            map.put("title", articles2.get(i).toString());
+            map.put("detail1",str3[i]);
+            map.put("detail2",str4[i]);
+            list.add(map);
+         
+      }
+      }
+      
+//         href=articles.toString();
+//         href2=articles2.toString();
+//         href=href.replace("<", "<p><");
+//         href=href.replace(">", " width=700px height=500px></p>");
+//         
+//         
+//          arrhref=href.split("\n");
+//          arrhref2=href2.split("\n");
+//         
+//         for(int i=0;i<arrhref.length;i++) {
+//         
+//         arrhref[i]="<div>"+arrhref[i]+arrhref2[i];
+//         
+//         System.out.println(arrhref[i]);
+//         }
+//         go=arrhref[0];
+//         for(int i=1;i<arrhref.length;i++) {
+//            go+=arrhref[i];
+//         
+//         }
+         
+      catch(Exception e) {
+         e.printStackTrace();
+      }
+      
+      
+      
+      model.addAttribute("list", list);
+      
+//      model.addAttribute("href",go);
+//      model.addAttribute("href2",href2);
+      model.addAttribute(service.read(bno));
+      
 
-	}
-	
-	@RequestMapping(value="/removePage",method=RequestMethod.POST)
-	public String remove(@RequestParam("bno") int bno,
-			SearchCriteria cri,
-			RedirectAttributes rttr) throws Exception{
-		
-		service.remove(bno);
-		
-		rttr.addAttribute("page",cri.getPage());
-		rttr.addAttribute("perPageNum",cri.getPerPageNum());
-		rttr.addAttribute("searchType",cri.getSearchType());
-		rttr.addAttribute("keyword",cri.getKeyword());
-		
-		rttr.addFlashAttribute("msg","SUCCESS");
-		return "redirect:/information/";
-	}
-	
-	@RequestMapping(value="/modifyPage",method=RequestMethod.GET)
-	public void modifyPagingGET(int bno,
-			@ModelAttribute("cri") SearchCriteria cri,
-			Model model) throws Exception
-	{
-		model.addAttribute(service.read(bno));
-	}
-	
-	@RequestMapping(value="/modifyPage",method=RequestMethod.POST)
-	public String modifyPagingPOST(BoardVO board,
-			SearchCriteria cri,
-			RedirectAttributes rttr) throws Exception{
-		
-		logger.info(cri.toString());
-		service.modify(board);
-		
-		rttr.addAttribute("page",cri.getPage());
-		rttr.addAttribute("perPageNum",cri.getPerPageNum());
-		rttr.addAttribute("searchType",cri.getSearchType());
-		rttr.addAttribute("keyword",cri.getKeyword());
-		
-		rttr.addFlashAttribute("msg","SUCCESS");
-		
-		logger.info(rttr.toString());
-		
-		return "redirect:/information/";
-	}
-	
-	@RequestMapping("/getAttach/{bno}")
-		@ResponseBody
-		public List<String> getAttach(@PathVariable("bno") Integer bno)throws Exception{
-		return service.getAttach(bno);
-	}
+   }
+   
+   @RequestMapping(value="/removePage",method=RequestMethod.POST)
+   public String remove(@RequestParam("bno") int bno,
+         SearchCriteria cri,
+         RedirectAttributes rttr) throws Exception{
+      
+      service.remove(bno);
+      
+      rttr.addAttribute("page",cri.getPage());
+      rttr.addAttribute("perPageNum",cri.getPerPageNum());
+      rttr.addAttribute("searchType",cri.getSearchType());
+      rttr.addAttribute("keyword",cri.getKeyword());
+      
+      rttr.addFlashAttribute("msg","SUCCESS");
+      return "redirect:/information/";
+   }
+   
+   @RequestMapping(value="/modifyPage",method=RequestMethod.GET)
+   public void modifyPagingGET(int bno,
+         @ModelAttribute("cri") SearchCriteria cri,
+         Model model) throws Exception
+   {
+      model.addAttribute(service.read(bno));
+   }
+   
+   @RequestMapping(value="/modifyPage",method=RequestMethod.POST)
+   public String modifyPagingPOST(BoardVO board,
+         SearchCriteria cri,
+         RedirectAttributes rttr) throws Exception{
+      
+      logger.info(cri.toString());
+      service.modify(board);
+      
+      rttr.addAttribute("page",cri.getPage());
+      rttr.addAttribute("perPageNum",cri.getPerPageNum());
+      rttr.addAttribute("searchType",cri.getSearchType());
+      rttr.addAttribute("keyword",cri.getKeyword());
+      
+      rttr.addFlashAttribute("msg","SUCCESS");
+      
+      logger.info(rttr.toString());
+      
+      return "redirect:/information/";
+   }
+   
+   @RequestMapping("/getAttach/{bno}")
+      @ResponseBody
+      public List<String> getAttach(@PathVariable("bno") Integer bno)throws Exception{
+      return service.getAttach(bno);
+   }
 }

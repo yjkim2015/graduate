@@ -182,7 +182,7 @@ var speak=0;
 			namecount=data.chat2.length;
 			for(var i=0;i<namecount;i++){
 				//alert(namelist[i])
-				$(".chatList2").append("<li id='join4'>"+namelist[i]+"<br></li>");
+				$(".chatList2").append("<li id='join4' style='margin-top:2px;'>"+namelist[i]+"<br></li>");
 
 			}
 		  var lis= $(".chatList2").find('li');			
@@ -249,7 +249,7 @@ var speak=0;
 
 		for(var i=0;i<namecount;i++){
 			//alert(namelist[i])
-			$(".chatList2").append("<li id='join4'>"+namelist[i]+"<br></li>");
+			$(".chatList2").append("<li id='join4' style='margin-top:2px;'>"+namelist[i]+"<br></li>");
 
 		}
 	  var lis= $(".chatList2").find('li');
@@ -279,7 +279,7 @@ var speak=0;
 		  },
 		  url:"chat_send",
 		  success:function(data){
-			  alert(data);
+			
 
 			  var index=data.indexOf("{");
 

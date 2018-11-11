@@ -29,17 +29,17 @@ public class MemberServiceImpl implements MemberService {
 	public void create(MemberVO member) throws Exception {
 		// TODO Auto-generated method stub
 		dao.register(member);
-		String key = new TempKey().getKey(50, false); // ÀÎÁõÅ° »ı¼º
+		String key = new TempKey().getKey(50, false); // ï¿½ï¿½ï¿½ï¿½Å° ï¿½ï¿½ï¿½ï¿½
 
-		dao.createAuthKey(member.getFullemail(), key); // ÀÎÁõÅ° DBÀúÀå
+		dao.createAuthKey(member.getFullemail(), key); // ï¿½ï¿½ï¿½ï¿½Å° DBï¿½ï¿½ï¿½ï¿½
 
 		MailHandler sendMail = new MailHandler(mailSender);
-		sendMail.setSubject("[È¸¿ø°¡ÀÔ ÀÎÁõ ÄÚµå ¹ß±Ş ¾È³»ÀÔ´Ï´Ù.]");
+		sendMail.setSubject("íšŒì›ê°€ì… ì¸ì¦ ì½”ë“œ ë°œê¸‰ ì•ˆë‚´ì…ë‹ˆë‹¤.]");
 		/*sendMail.setText(
-				new StringBuffer().append("<h1>ÀÌ¸ŞÀÏ ÀÎÁõ È®ÀÎÀ» ´©¸£½Ã°í ·Î±×ÀÎ ÇØÁÖ¼¼¿ä.</h1>").append("<a href='http://192.168.56.1:8080/membership/emailConfirm?email=").append(member.getFullemail()).append("' target='_blank'>ÀÌ¸ŞÀÏ ÀÎÁõ È®ÀÎ</a>").toString());
+				new StringBuffer().append("<h1>ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.</h1>").append("<a href='http://192.168.56.1:8080/membership/emailConfirm?email=").append(member.getFullemail()).append("' target='_blank'>ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½</a>").toString());
 		*/
 		sendMail.setText(
-				new StringBuffer().append("<h1>ÀÌ¸ŞÀÏ ÀÎÁõ È®ÀÎÀ» ´©¸£½Ã°í ·Î±×ÀÎ ÇØÁÖ¼¼¿ä.</h1>").append("<a href='https://13.59.1.183/membership/emailConfirm?email=").append(member.getFullemail()).append("' target='_blank'>ÀÌ¸ŞÀÏ ÀÎÁõ È®ÀÎ</a>").toString());
+				new StringBuffer().append("<h1>ì´ë©”ì¼ ì¸ì¦ í™•ì¸ì„ ëˆ„ë¥´ì‹œê³  ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”.</h1>").append("<a href='https://13.59.1.183/membership/emailConfirm?email=").append(member.getFullemail()).append("' target='_blank'>ì´ë©”ì¼ ì¸ì¦ í™•ì¸</a>").toString());
 	
 		sendMail.setFrom("forteas2003@skuniv.ac.kr", "With");
 		sendMail.setTo(member.getFullemail());

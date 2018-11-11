@@ -95,7 +95,7 @@ public class ChatBoardController {
 		throws Exception{
 		room= Integer.toString(bno);
 	
-		System.out.println(room+"��Ʈ�ѷ� ");
+		System.out.println(room+"占쏙옙트占싼뤄옙 ");
 		model.addAttribute(service.read(bno));
 		
 	}
@@ -147,7 +147,7 @@ public class ChatBoardController {
 
 	@RequestMapping(value="/nameList",method= {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody  Map<String,List<String>> CheckLogin(String chatname,int bno,ChatList chatlist) throws Exception{
-	System.out.println("���Դ�");
+	System.out.println("占쏙옙占쌉댐옙");
 	Boolean isOkay=false;
 	List<ChatList> chat;
 	 Map<String,List<String>> map = new HashMap<>();
@@ -173,7 +173,7 @@ public class ChatBoardController {
 			}
 		 
 		 map.put("chat2", chat2);
-		 System.out.println(chat.size()+"���׷�");
+		 System.out.println(chat.size()+"占쏙옙占쌓뤄옙");
 		 System.out.println(chat2.size());
 		
 		 
@@ -182,17 +182,19 @@ public class ChatBoardController {
 	}
 	@RequestMapping(value="/chat_send",method= {RequestMethod.GET,RequestMethod.POST},produces="application/text;charset=utf8")
 	public @ResponseBody String chat_send(String msg,int speak) throws Exception{
-//		System.out.println(msg);
+		System.out.println(msg+"chat_send留�");
 		 String send_msg="";
 		 String []arr=msg.split(":");
-		 System.out.println(arr.length+"�迭 ���̴�");
-		 String clientId = "OoFEn1ZnOZuHpNnRhUAP";//���ø����̼� Ŭ���̾�Ʈ ���̵�";
-	        String clientSecret = "dU4Ean5xoj";//���ø����̼� Ŭ���̾�Ʈ ��ũ����";
+	
+		 String clientId = "OoFEn1ZnOZuHpNnRhUAP";//占쏙옙占시몌옙占쏙옙占싱쇽옙 클占쏙옙占싱억옙트 占쏙옙占싱듸옙";
+	        String clientSecret = "dU4Ean5xoj";//占쏙옙占시몌옙占쏙옙占싱쇽옙 클占쏙옙占싱억옙트 占쏙옙크占쏙옙占쏙옙";
 	        try {
 	            String text="";
 	            if(arr.length==1) 
 	            { text= URLEncoder.encode(arr[0], "UTF-8");}
-	            else{text= URLEncoder.encode(arr[1], "UTF-8");}
+	            else{
+	            	System.out.println(arr[1]);
+	            	text= URLEncoder.encode(arr[1], "UTF-8");}
 	            String apiURL = "https://openapi.naver.com/v1/language/translate";
 	            URL url = new URL(apiURL);
 	            HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -211,12 +213,12 @@ public class ChatBoardController {
 	            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 	            wr.writeBytes(postParams);
 	            wr.flush();
-	            wr.close();
+	            wr.close	();
 	            int responseCode = con.getResponseCode();
 	            BufferedReader br;
-	            if(responseCode==200) { // ���� ȣ��
+	            if(responseCode==200) { // 占쏙옙占쏙옙 호占쏙옙
 	                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	            } else {  // ���� �߻�
+	            } else {  // 占쏙옙占쏙옙 占쌩삼옙
 	                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 	            }
 	            String inputLine;
@@ -246,7 +248,7 @@ public class ChatBoardController {
 
 	@RequestMapping(value="/realnameList",method= {RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody  Map<String,List<String>> realCheck(String chatname,int bno,ChatList chatlist) throws Exception{
-	System.out.println("���Դ�");
+	System.out.println("占쏙옙占쌉댐옙");
 	List<ChatList> chat;
 	 Map<String,List<String>> map = new HashMap<>();
 	 
@@ -261,7 +263,7 @@ public class ChatBoardController {
 			}
 		 
 		 map.put("chat2", chat2);
-		 System.out.println(chat.size()+"���׷�");
+		 System.out.println(chat.size()+"占쏙옙占쌓뤄옙");
 		 System.out.println(chat2.size());
 		 System.out.println(chat2.get(0));
 		 
@@ -272,7 +274,7 @@ public class ChatBoardController {
 	@RequestMapping(value="/nameremove",method={RequestMethod.GET,RequestMethod.POST})
 	public @ResponseBody List<String> remove(
 			String chatname,int bno,ChatList chatlist) throws Exception{
-		System.out.println("�Ŀ�");System.out.println("�Ŀ�");
+		System.out.println("占식울옙");System.out.println("占식울옙");
 		List<String> chat2= new ArrayList<String>();
 		List<ChatList> chat;
 		 Map<List<String>,String> map = new HashMap<>();
@@ -290,7 +292,7 @@ public class ChatBoardController {
 			 map.put(chat2, chat.get(i).getChatname());
 			 System.out.println(chat.get(i).getChatname());
 		 }*/
-		 System.out.println(chat.size()+"���׷�");
+		 System.out.println(chat.size()+"占쏙옙占쌓뤄옙");
 		 System.out.println(chat2.size());
 		 System.out.println(chat2.get(0));
 		 return chat2;
